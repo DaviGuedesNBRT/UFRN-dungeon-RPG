@@ -24,7 +24,7 @@ Certifica-te de que tens um compilador C instalado (como o `gcc`). No terminal, 
 
 ```bash
 # Clonar o repositório
-git clone [https://github.com/DaviGuedesNBRT/nome-do-repositorio.git](https://github.com/DaviGuedesNBRT/UFRN-dungeon-RPG.git)
+git clone [https://github.com/DaviGuedesNBRT/UFRN-dungeon-RPG.git](https://github.com/DaviGuedesNBRT/UFRN-dungeon-RPG.git)
 
 # Aceder ao diretório
 cd UFRN-dungeon-RPG
