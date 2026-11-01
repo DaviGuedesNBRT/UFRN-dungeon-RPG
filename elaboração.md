@@ -1,78 +1,72 @@
 # 📜 REGRAS DO JOGO: DUNGEON OF THE THREE REALMS
 
 ## 1. Menu Principal
+
 * **Opções disponíveis:**
   1. `[1]` Iniciar Jogo (Vai para a escolha de personagem).
   2. `[2]` Sair do Jogo (Encerra a execução do programa).
 * **Validação:** O terminal deve tratar entradas inválidas (ex: se o utilizador digitar uma letra ou um número fora do intervalo 1-2, o sistema exibe um aviso e solicita uma nova entrada).
 
----
+## 2. Seleção de Personagem e Equipamentos
 
-## 2. Seleção de Personagem
-O jogador escolhe uma das 3 classes disponíveis. Cada uma possui atributos iniciais fixos e uma habilidade especial única:
-* **Guerreiro:** Focado em combate corpo a corpo, alta vida e força bruta.
-* **Mago:** Focado em magia, inteligência elevada e ataques em área.
-* **Arqueiro:** Focado em agilidade e alta precisão de acerto crítico.
+O jogador escolhe uma das 3 classes disponíveis. Cada classe possui atributos iniciais fixos e equipamentos padrão (que devem ser registrados na estrutura do personagem como strings: `Roupa` e `Arma`):
 
----
+* **Guerreiro:** Focado em combate corpo a corpo. Alta vida e força bruta.
+  * **Habilidade Especial:** *Golpe Poderoso* (Causa dano adicional direto).
+* **Mago:** Focado em magia. Inteligência elevada e ataques em área.
+  * **Habilidade Especial:** *Explosão Arcana* (Concede bônus multiplicador de dano no turno).
+* **Arqueiro:** Focado em agilidade e precisão.
+  * **Habilidade Especial:** *Tiro Preciso* (Maior chance de acerto crítico/dano máximo).
 
-## 3. Estrutura de Fases e Tabuleiro
-O jogo possui **3 fases progressivas**:
-* **Fase 1:** Floresta Sombria
-* **Fase 2:** Masmorra Antiga
-* **Fase 3:** Fortaleza do Dragão
+## 3. Estrutura de Fases, Missões e Monstros
+
+O jogo possui **3 fases progressivas**. Cada fase tem uma **Missão Principal** que deve ser exibida no início, e um conjunto específico de monstros:
+
+* **Fase 1: Floresta Sombria**
+  * *Missão:* Encontrar a Chave Antiga e derrotar o Guardião da Floresta.
+  * *Monstros:* Goblin, Lobo Selvagem, Esqueleto Guerreiro.
+* **Fase 2: Masmorra Antiga**
+  * *Missão:* Recuperar o Artefato e abrir o portão para o próximo reino.
+  * *Monstros:* Orc Guerreiro, Aranha Gigante, Cavaleiro Amaldiçoado.
+* **Fase 3: Fortaleza do Dragão**
+  * *Missão:* Derrotar o Dragão Ancestral e recuperar o Tesouro Lendário.
+  * *Monstros:* Demônio das Chamas, Golem de Pedra, Dragão Ancestral (Chefe Final).
 
 ### Funcionamento do Tabuleiro:
-* **Tamanho do Tabuleiro:** Cada fase é composta por **10 casas** fixas (vetor de tamanho 10).
-* **Geração de Eventos por Casa:** 
-  * Ao iniciar a fase, uma função percorre o tabuleiro de 1 a 10 e utiliza um gerador de números aleatórios de **1 a 5** para injetar o tipo de evento em cada casa:
-    * `1` = **Combate com Monstro** (Gera um monstro aleatório adequado à fase).
-    * `2` = **Tesouro** (Ganha XP ou itens de atributos).
-    * `3` = **Poção de Cura** (Recupera uma quantidade de vida).
-    * `4` = **Armadilha** (Causa dano direto ou reduz temporariamente um atributo).
-    * `5` = **Evento Neutro / Vazio** (Acontece uma narrativa curta ou nada acontece).
-  * **A Casa Final (Casa 10):** A última casa da fase é obrigatoriamente o **Chefe da Fase** (o 3º monstro, mais forte). Só é possível avançar de fase após derrotar o chefe.
-* **Progressão de Fase:** 
-  * Ao completar as 10 casas e derrotar o chefe, o jogador transita para a próxima fase.
-  * **Cura total:** A vida do jogador é totalmente restabelecida ao mudar de fase.
-  * **Aumento de Dificuldade:** A cada fase, a dificuldade global aumenta, aplicando penalizadores no ataque do jogador.
-
----
+* **Tamanho do Tabuleiro:** Cada fase é composta por **10 casas** fixas.
+* **Geração de Eventos por Casa (1 a 9):** Aleatoriamente (1 a 5):
+  * `1` = **Combate com Monstro** (Gera um monstro da fase atual).
+  * `2` = **Tesouro** (Ganha XP).
+  * `3` = **Poção de Cura** (Recupera uma quantidade de vida).
+  * `4` = **Armadilha** (Causa dano direto).
+  * `5` = **Evento Neutro / Vazio** (Nada acontece).
+* **A Casa Final (Casa 10):** É obrigatoriamente o **Chefe da Fase** (o 3º monstro da lista). A fase só é concluída ao derrotá-lo.
 
 ## 4. Mecânicas de Jogo e Combate
 
-### A. Progressão de Dificuldade vs. Ataque Base
-A dificuldade da fase afeta diretamente a eficiência ofensiva do personagem:
-* **Fase 1 (Nível 1):** O personagem mantém **100%** do seu ataque base.
-* **Fase 2 (Nível 2):** O personagem sofre penalização e fica com **90%** do seu ataque base.
-* **Fase 3 (Nível 3):** O personagem sofre maior penalização e fica com **75%** do seu ataque base.
+### A. Progressão de Dificuldade
+A dificuldade aumenta a cada fase de duas formas:
+1. **Redutor do Jogador:** Fase 1 (100% do ataque), Fase 2 (90% do ataque), Fase 3 (75% do ataque).
+2. **Fator de Escala dos Monstros:** Os atributos dos monstros aumentam conforme a fase usando a fórmula: `AtributoFinal = ceil(AtributoBase * fatorFase)`.
+3. **Descrição do Inimigo:** Todo monstro gerado deve imprimir na tela "Uma breve descrição" antes do combate começar.
 
 ### B. Ações em Turnos de Combate
-O combate ocorre em turnos (Jogador vs. Monstro) até que a vida de um deles chegue a zero. Em cada turno, o jogador pode escolher entre opções como:
-1. Atacar
-2. Defender
-3. Usar Habilidade Especial
-4. Fugir
+O combate ocorre em turnos. A cada turno, o jogador DEVE escolher uma das opções do menu exato:
+* `[1]` Atacar
+* `[2]` Defender
+* `[3]` Habilidade Especial
+* `[4]` Fugir
 
-### C. Fórmulas de Rolagem de Dados e Dano (D10 e D20)
-As ações de ataque e defesa utilizam percentuais baseados em rolagens de dados (D10):
-
-* **Cálculo da Defesa no Turno:**
-  * O jogador ou o monstro rola um D10. Se o resultado for $X$:
-  * $$\text{DefesaFinal} = \text{DefesaAtual} + \left(\text{DefesaAtual} \times \frac{X}{10}\right)$$
-
-* **Cálculo do Ataque no Turno:**
-  * O atacante rola um D10. Se o resultado for $X$:
-  * $$\text{AtaqueTemporario} = \text{AtaqueAtualBase} + \left(\text{AtaqueAtualBase} \times \frac{X}{10}\right)$$
-  *(Nota: Aplicar primeiro o redutor de dificuldade de 100%, 90% ou 75% sobre o ataque base antes de somar a porcentagem do dado).*
-
+### C. Fórmulas de Rolagem de Dados e Dano (D10)
+* **Cálculo da Defesa no Turno:** (Ao escolher Defender)
+  * Rola-se um D10 ($X$).
+  * $\text{DefesaFinal} = \text{DefesaAtual} + \left(\text{DefesaAtual} \times \frac{X}{10}\right)$
+* **Cálculo do Ataque no Turno:** (Ao escolher Atacar)
+  * Rola-se um D10 ($X$).
+  * $\text{AtaqueTemporario} = \text{AtaqueAtualBase} + \left(\text{AtaqueAtualBase} \times \frac{X}{10}\right)$ (Lembrando de aplicar o redutor de fase no Ataque Base primeiro).
 * **Cálculo do Dano Efetivo:**
-  * $$\text{DanoCausado} = \max(1, \text{AtaqueTemporario} - \text{DefesaDoOponente})$$
-  *(Garante que o dano mínimo seja sempre 1).*
+  * $\text{DanoCausado} = \max(1, \text{AtaqueTemporario} - \text{DefesaDoOponente})$
 
-### D. Sistema de XP e Atributos
-* Ao vencer um combate, o jogador recebe **XP (Experiência)**.
-* O XP acumulado converte-se em pontos de melhoria que o jogador pode distribuir livremente entre os seus atributos (Força, Defesa, Agilidade ou Inteligência).
-
-### E. Drops de Monstros
-* Sempre que um monstro comum ou chefe é derrotado, ele gera um **drop de buff aleatório** (como poções bônus ou aumentos temporários de atributos) aplicado diretamente ao personagem.
+### D. Sistema de Recompensas e Atributos (Pós-Combate)
+* **XP e Bônus Aleatório:** Ao vencer um monstro, o jogador ganha Experiência (XP). Além disso, o sistema deve **sortear aleatoriamente** um atributo (Força, Defesa, Agilidade, Inteligência ou Vida Máxima) e conceder um bônus permanente (+1 ou +2) a esse status.
+* **Cura de Fase:** Ao completar a Missão e passar para a próxima fase, a vida do jogador é totalmente restabelecida.
