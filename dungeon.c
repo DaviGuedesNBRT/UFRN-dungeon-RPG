@@ -46,10 +46,10 @@ void limparTerminal() {
 
 void gerarTabuleiro(Casa tabuleiro[], int tamanho){
     for (int i=0; i < tamanho - 1; i++){
-        tabuleiro[i].tipoEvento = (rand() % 5) + 1;
+        tabuleiro[i].tipoEvento = (rand() % 4) + 1;
         tabuleiro[i].visitada = 0;
     }
-    tabuleiro[tamanho - 1].tipoEvento = 6;
+    tabuleiro[tamanho - 1].tipoEvento = 5;
     tabuleiro[tamanho - 1].visitada = 0;
 }
 
@@ -172,6 +172,72 @@ void abrirTesouro(Personagem *p, int lados, int fase){
     printf("\nStatus atual -> Vida: %d/%d | XP: %d\n", p->vidaAtual, p->vidaMaxima, p->experiencia);
 }
 
+void gerarMonstro(Monstro *m, int fase, int evento){
+    if(evento == 1){
+        int tipoComum = (rand() %2) + 1;
+
+        switch (fase) {
+            case 1:
+                if (tipoComum == 1) {
+                    strcpy(m->nome, "Goblin Saqueador");
+                    m->vidaMaxima = 30; m->ataque = 8; m->defesa = 3;
+                    strcpy(m->descricao, "Pequeno, rapido e traicoeiro.");
+                } else {
+                    strcpy(m->nome, "Lobo Selvagem");
+                    m->vidaMaxima = 25; m->ataque = 10; m->defesa = 2;
+                    strcpy(m->descricao, "Feroz e esfomeado.");
+                }
+                break;
+                
+            case 2:
+                if (tipoComum == 1) {
+                    strcpy(m->nome, "Orc Guerreiro");
+                    m->vidaMaxima = 50; m->ataque = 14; m->defesa = 5;
+                    strcpy(m->descricao, "Brutamontes armado com machado.");
+                } else {
+                    strcpy(m->nome, "Aranha Gigante");
+                    m->vidaMaxima = 40; m->ataque = 16; m->defesa = 4;
+                    strcpy(m->descricao, "Sua teia e mortal.");
+                }
+                break;
+                
+            case 3:
+                if (tipoComum == 1) {
+                    strcpy(m->nome, "Esqueleto Armadurado");
+                    m->vidaMaxima = 70; m->ataque = 18; m->defesa = 10;
+                    strcpy(m->descricao, "Guerreiro caido e reanimado.");
+                } else {
+                    strcpy(m->nome, "Espirito Vingativo");
+                    m->vidaMaxima = 60; m->ataque = 22; m->defesa = 5;
+                    strcpy(m->descricao, "Alma em tormento que suga a vida.");
+                }
+                break;
+        }
+    } else if (evento == 5){
+
+        switch (fase) {
+            case 1:
+                strcpy(m->nome, "Chefe 1: Esqueleto Guerreiro");
+                m->vidaMaxima = 80; m->ataque = 15; m->defesa = 8;
+                strcpy(m->descricao, "Lider implacavel da floresta.");
+                break;
+            case 2:
+                strcpy(m->nome, "Chefe 2: Cavaleiro Amaldiçoado");
+                m->vidaMaxima = 120; m->ataque = 22; m->defesa = 12;
+                strcpy(m->descricao, "Um gigante brutal e experiente.");
+                break;
+            case 3:
+                strcpy(m->nome, "Chefe Final: Dragao Ancestral");
+                m->vidaMaxima = 200; m->ataque = 30; m->defesa = 20;
+                strcpy(m->descricao, "A criatura mais temida deste reino.");
+                break;
+        }
+    }
+    
+    m->vidaAtual = m->vidaMaxima;
+    m->dificuldade = fase;
+}
+
 int main(){
     srand(time(NULL));
 
@@ -217,7 +283,7 @@ int main(){
         default:
             break;
         }
-        
+
         //se o jogador morrer, o jogo acaba!
         if (jogador.vidaAtual <= 0){
             printf("\nvoce foi derrotado... fim de jogo.\n");

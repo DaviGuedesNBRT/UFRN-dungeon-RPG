@@ -39,7 +39,6 @@ O jogo possui **3 fases progressivas**. Cada fase tem uma **Missão Principal** 
   * `2` = **Tesouro** (Ganha XP).
   * `3` = **Poção de Cura** (Recupera uma quantidade de vida).
   * `4` = **Armadilha** (Causa dano direto).
-  * `5` = **Evento Neutro / Vazio** (Nada acontece).
 * **A Casa Final (Casa 10):** É obrigatoriamente o **Chefe da Fase** (o 3º monstro da lista). A fase só é concluída ao derrotá-lo.
 
 ## 4. Mecânicas de Jogo e Combate
